@@ -30,7 +30,6 @@ return {
       
       -- Setup language servers
       lspconfig.pyright.setup({})      -- Python
-      lspconfig.clangd.setup({})       -- C/C++/CUDA
       lspconfig.lua_ls.setup({})       -- Lua
       lspconfig.bashls.setup({})       -- Bash
       lspconfig.jsonls.setup({})       -- JSON
@@ -47,6 +46,7 @@ return {
           "--function-arg-placeholders",
           "--fallback-style=llvm",
           "--query-driver=/usr/local/cuda/bin/nvcc",  -- Tell clangd about nvcc
+          "--enable-config"
         },
         filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
         init_options = {
@@ -60,21 +60,9 @@ return {
           ".git",
           "CMakeLists.txt",
           "Makefile"
-        ),
-      
-        -- Add CUDA-specific settings
-        settings = {
-          clangd = {
-            arguments = {
-              "-I/usr/local/cuda/include",
-              "-D__CUDACC__",
-              "-D__NVCC__",
-              "--cuda-gpu-arch=sm_75",  -- using RTX 2070 super
-            },
-          },
-        },
+        )
       })
-      
+
       -- Set up file type associations for CUDA files
       vim.filetype.add({
         extension = {
