@@ -28,3 +28,34 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
+-- Better diagnostic display
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '●', -- Could be '■', '▎', etc.
+    spacing = 4,
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
+})
+
+-- Auto-show diagnostics on hover
+vim.api.nvim_create_autocmd("CursorHold", {
+  pattern = "*.scala",
+  callback = function()
+    vim.diagnostic.open_float(nil, { 
+      focus = false,
+      scope = "cursor",
+    })
+  end
+})
+
+-- Faster hover trigger
+vim.opt.updatetime = 300

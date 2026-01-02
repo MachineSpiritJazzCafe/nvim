@@ -14,15 +14,22 @@ return {
       metals_config.settings = {
         metals = {
           useGlobalExecutable = true,  -- Use system metals, not nvim-metals' copy
+          showInferredType = true,
+          showImplicitArguments = true
         },
-      }
+      }      
       
       metals_config.on_attach = function(client, bufnr)
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
         vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = bufnr })
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr })
-      end
+        
+        vim.keymap.set('v', '<leader>t', function()
+            require('metals').type_of_range()
+        end, { buffer = bufnr, desc = 'Show type of selection' })
+
+    end
 
       local augroup = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {

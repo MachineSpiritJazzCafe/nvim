@@ -26,17 +26,23 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = { "mason-lspconfig.nvim" },
     config = function()
-      local lspconfig = require("lspconfig")
+      vim.diagnostic.config({
+        virtual_text = true,
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true
+      })
       
       -- Setup language servers
-      lspconfig.pyright.setup({})      -- Python
-      lspconfig.lua_ls.setup({})       -- Lua
-      lspconfig.bashls.setup({})       -- Bash
-      lspconfig.jsonls.setup({})       -- JSON
-      lspconfig.yamlls.setup({})       -- YAML
+      vim.lsp.config.pyright = {} -- Python
+      vim.lsp.config.lua_ls  = {} -- Lua
+      vim.lsp.config.bashls  = {} -- Bash
+      vim.lsp.config.jsonls  = {} -- JSON
+      vim.lsp.config.yamlls  = {} -- YAML
 
      -- Enhanced clangd setup for C/C++/CUDA
-      lspconfig.clangd.setup({
+      vim.lsp.config.clangd = {
         cmd = {
           "clangd",
           "--background-index",
@@ -49,19 +55,15 @@ return {
           "--enable-config"
         },
         filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-        init_options = {
-          usePlaceholders = true,
-          completeUnimported = true,
-          clangdFileStatus = true,
-        },
-        root_dir = lspconfig.util.root_pattern(
+        root_markers = {
           "compile_commands.json",
           ".clangd",
           ".git",
           "CMakeLists.txt",
           "Makefile"
-        )
-      })
+        }
+     }
+     vim.lsp.enable({"pyright", "lua_ls", "bashls", "jasonls", "yamlls"})
 
       -- Set up file type associations for CUDA files
       vim.filetype.add({
